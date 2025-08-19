@@ -32,6 +32,8 @@ An OpenFOAM pipeline for designing and testing microfluidic mixer geometries (el
 ## 🏁 Quick Start: Velocity Simulation (elbow_chip2.1.4_PP)
 
 **Design:** 9-baffle mixer based on iLiNP with minor geometry tweaks.  
+- **Channel width:** 50 µm per inlet, 100 µm total.  
+
 
 **Key commands:** `ls`, `cd`, `nano`, `gmsh`, `gmshToFoam`, `checkMesh`, `icoFoam`, `paraFoam`
 
@@ -126,9 +128,9 @@ elbow_chip2.1.4_PP/
 
 ## 📐 Geometry Details
 
-- **Channel width:** 50 µm per inlet, 100 µm total.  
-- **Curve loops:** Define inlet_1, inlet_2, outlet, wall_vertical, wall_horizental, frontAndBackPlanes.  
-- **Meshing tip:** If loop isn’t closed, Gmsh reports “Curve loop is wrong.” Delete/redefine the loop in the GUI or script.
+- **Meshing tip:** If loop isn’t closed, Gmsh reports “Curve loop is wrong.” Delete/redefine the loop in the GUI or script. Aim for non-orthogonality < 70°, skewness < 4.
+- **Curve Loop errors:** Open Gmsh GUI → “Reload script” after edits → define Curve Loop → ensure closure.  
+- **Physical groups:** Define separate Plane Surfaces for each patch: `inlet_1`, `inlet_2`, `outlet`, `wall_vertical`, `wall_horizental`, `frontAndBackPlanes`.
 
 ---
 
@@ -153,6 +155,5 @@ elbow_chip2.1.4_PP/
 
 ## 📝 License & Contributions
 
-Contributions and issues welcome.  
-Maintainer: Your Name (<your.email@institution.edu>)  
+Maintainer: Oliver Harper (<oliharps"gmail.com>)  
 
