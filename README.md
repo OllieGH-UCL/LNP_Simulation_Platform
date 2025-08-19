@@ -40,11 +40,10 @@ An OpenFOAM pipeline for designing and testing microfluidic mixer geometries (el
    - 1D → 2D → 3D mesh; fix any “curve loop” errors by ensuring all lines appear in the loop
      
 2. **Export to OpenFOAM**  
-bash
-LIBGL_ALWAYS_SOFTWARE=1 gmsh geometry/t_shape.geo
-gmsh geometry/t_shape.geo -3 -o run/test.msh
-gmshToFoam run/test.msh
-checkMesh # max non-orthogonality < 70°
+$ LIBGL_ALWAYS_SOFTWARE=1 gmsh geometry/t_shape.geo
+$ gmsh geometry/t_shape.geo -3 -o run/test.msh
+$ gmshToFoam run/test.msh
+$ checkMesh # max non-orthogonality < 70°
 
 3. **Run solver**  
         icofoam
