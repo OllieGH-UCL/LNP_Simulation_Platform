@@ -47,10 +47,21 @@ An OpenFOAM pipeline for designing and testing microfluidic mixer geometries (el
 
 4. **Run solver**  
 - $ icofoam
+- Control **Courant number** via `system/controlDict`:  
+  ```
+  maxCo         1;         // maximum Courant number
+  adjustTimeStep yes;      // adaptive time stepping
+  ```
+- If Co > 5, simulation aborts. To fix: refine mesh, reduce `deltaT`, or adjust inlet velocities.
 
-5. **Post-process**  
+4. **Post-process in ParaView**  
 - $ paraFoam # visualize p and U fields
-
+- Load the case; click **Apply**.  
+- Visualize **Pressure (p)** and **Velocity (U)** over time.  
+- For streamlines, glyphs, or flow‐rate integration, see:  
+  - Stream Traces & Glyphs: https://www.youtube.com/watch?v=aTDmesw9jxc  
+  - Flow Rate & Plotting: https://www.youtube.com/watch?v=vgFL8kv320w  
+- *Tip:* limit the number of time steps loaded to avoid performance issues.
 
 ---
 
