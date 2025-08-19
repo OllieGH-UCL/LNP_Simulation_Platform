@@ -158,3 +158,6 @@ elbow_chip2.1.4_PP                  ← Top‐level case directory
 
 Maintainer: Oliver Harper (<oliharps"gmail.com>)  
 
+<img width="1295" height="727" alt="image" src="https://github.com/user-attachments/assets/1e73815a-cc29-42e6-b8ab-478175aaf92f" />
+
+
