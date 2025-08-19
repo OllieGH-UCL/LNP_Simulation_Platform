@@ -8,6 +8,8 @@ An OpenFOAM pipeline for designing and testing microfluidic mixer geometries (el
 - Automated mesh generation from Gmsh `.geo` files  
 - Quick mesh-quality checks and ParaView post-processing  
 
+<img width="1935" height="2285" alt="image" src="https://github.com/user-attachments/assets/9cfc20a9-b507-45df-a5b6-afc9ed0c3a71" />
+
 ---
 
 ## 🛠 Software Requirements
