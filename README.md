@@ -46,10 +46,10 @@ An OpenFOAM pipeline for designing and testing microfluidic mixer geometries (el
 - $ checkMesh # max non-orthogonality < 70°
 
 4. **Run solver**  
-        icofoam
+- $ icofoam
 
 5. **Post-process**  
-        paraFoam # visualize p and U fields
+- $ paraFoam # visualize p and U fields
 
 
 ---
