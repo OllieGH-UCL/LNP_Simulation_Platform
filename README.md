@@ -74,7 +74,7 @@ $ paraFoam # visualize p and U fields
 ---
 
 ## 📁 Folder Structure
-
+undefined
 elbow_chip2.1.4_PP/                  ← Top‐level case directory
 ├── 0/                              ← Initial and boundary fields
 │   ├── U                           ← Velocity field file
@@ -112,6 +112,7 @@ elbow_chip2.1.4_PP/                  ← Top‐level case directory
 ├── t_shape_2.geo                   ← Alternate baffle geometry #2
 ├── t_shape_3.geo                   ← Alternate baffle geometry #3
 └── t_shape_4.geo                   ← Latest 9-baffle design iteration
+undefined
 
 - **0/** holds your `U` and `p` definitions.  
 - **constant/polyMesh/** contains topology & zones after `gmshToFoam`.  
