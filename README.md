@@ -1,107 +1,140 @@
 # LNP_Simulation_Platform
 
-A turnkey OpenFOAM pipeline for designing and testing microfluidic mixer geometries (e.g., elbow_chip2.1.4_PP). It enables:
-- Single‐phase velocity and throughput validation
-- Two‐phase VOF‐based dilution studies (coming soon)
-- Automated mesh generation from Gmsh .geo files
-- Quick mesh‐quality checks and CFD post‐processing in ParaView
+An OpenFOAM pipeline for designing and testing microfluidic mixer geometries (elbow_chip2.1.4_PP).  
 
-# Task 1 
+**Features:**  
+- Single-phase velocity & throughput verification  
+- Two-phase VOF-based dilution studies (upcoming)  
+- Automated mesh generation from Gmsh `.geo` files  
+- Quick mesh-quality checks and ParaView post-processing  
 
-Here I go through one can run a Velcoity and Pressure simulation for the first task of simulationg and testing a LNP mixer. 
+---
 
-Here I use the elbow_chip2.1.4_PP folder. 
+## 🛠 Software Requirements
 
-# Details 
-## 📂 Repository Structure
-<img width="689" height="1083" alt="image" src="https://github.com/user-attachments/assets/b425b656-ccfb-40a7-a225-841c9a1598ad" />
+- Windows Subsystem for Linux (WSL)  
+- OpenFOAM v2412  
+- Gmsh  
+- Notepad++ (or any text editor)  
+- ParaView (`paraFoam` from terminal)  
+
+---
+
+## 📚 References
+
+- Development of the iLiNP Device: Fine Tuning the Lipid Nanoparticle Size within 10 nm for Drug Delivery  
+  https://pubs.acs.org/doi/10.1021/acsomega.8b00341  
+- Mass production system for RNA-loaded LNPs using piled microfluidic devices  
+  https://pubs.acs.org/doi/10.1021/acsomega.8b00341  
+
+---
+
+## 🏁 Quick Start: Velocity Simulation (elbow_chip2.1.4_PP)
+
+**Design:** 9-baffle mixer based on iLiNP with minor geometry tweaks.  
+
+**Key commands:** `ls`, `cd`, `nano`, `gmsh`, `gmshToFoam`, `checkMesh`, `icoFoam`, `paraFoam`
+
+1. **Create geometry & mesh**  
+   - Open `geometry/t_shape.geo` in Gmsh, set `lc = 0.1`  
+   - 1D → 2D → 3D mesh; fix any “curve loop” errors by ensuring all lines appear in the loop  
+2. **Export to OpenFOAM**  
+        LIBGL_ALWAYS_SOFTWARE=1 gmsh geometry/t_shape.geo
+        gmsh geometry/t_shape.geo -3 -o run/test.msh
+        gmshToFoam run/test.msh
+        checkMesh # max non-orthogonality < 70°
+
+3. **Run solver**  
+        icofoam
+
+4. **Post-process**  
+        paraFoam # visualize p and U fields
 
 
-## 🏁 Quick Start
+---
 
-Install prerequisites
-- WSL (Windows Subsystem for Linux)
-- OpenFOAM v2412
-- Gmsh
-- ParaView
+## 📁 Folder Structure
 
-Generate mesh and import into OpenFOAM
-bash
-cd elbow_chip2.1.4_PP
-LIBGL_ALWAYS_SOFTWARE=1 gmsh geometry/t_shape.geo
-gmsh geometry/t_shape.geo -3 -o run/test.msh
-gmshToFoam run/test.msh
-checkMesh
-Run single‐phase simulation
+elbow_chip2.1.4_PP/
+│
+├── 0/ ← Initial fields
+│ ├── U ← Velocity boundary conditions
+│ └── p ← Pressure boundary conditions
+│
+├── constant/ ← Mesh & material properties
+│ ├── polyMesh/ ← gmshToFoam output
+│ │ ├── boundary ← Patch definitions
+│ │ ├── faces, points, owner, neighbour, cellZones, faceZones, pointZones
+│ │ └── sets/fluid ← CellSet: fluid region
+│ ├── transportProperties ← ν, D, etc.
+│ └── turbulenceProperties.txt
+│
+├── geometry/ ← Gmsh .geo files
+│ ├── t_shape.geo ← Base T-junction
+│ ├── t_shape_2.geo ← Variation #2
+│ ├── t_shape_3.geo ← Variation #3
+│ └── t_shape_4.geo ← 9-baffle design
+│
+├── run/ ← Mesh & solver logs
+│ ├── test.msh ← Gmsh mesh
+│ ├── log.mesh ← gmshToFoam & checkMesh
+│ ├── log.foam ← icoFoam output
+│ ├── Allrun ← mesh→convert→solve script
+│ └── Allclean ← clean-up script
+│
+├── system/ ← OpenFOAM dictionaries
+│ ├── controlDict ← time stepping, write controls
+│ ├── fvSchemes ← discretization schemes
+│ ├── fvSolution ← solver settings & PISO
+│ └── foamDataToFluentDict ← fields to export
+│
+├── *.geo.opt ← Gmsh optimization settings
+├── error/ ← Error logs & screenshots
+├── find_unnamed_surfaces.py ← Detect untagged curve loops
+├── myenv_wsl ← WSL setup notes
+└── test.msh ← Top-level mesh (duplicate)
 
-bash
-icoFoam
 
-Visualize in ParaView
 
-bash
-paraFoam
-🔧 Installation
-1. Installing WSL
-(Instructions TBD)
+- **0/** holds your `U` and `p` definitions.  
+- **constant/polyMesh/** contains topology & zones after `gmshToFoam`.  
+- **transportProperties** & **turbulenceProperties.txt** define fluid physics.  
+- **geometry/** contains all Gmsh variants.  
+- **run/** automates mesh generation and solver runs.  
+- **system/** controls timestep, solvers, and export settings.  
+- **Extras:** debugging scripts and WSL environment notes.
 
-2. Installing OpenFOAM v2412
-(Instructions TBD)
+---
 
-3. Installing Gmsh
-bash
-sudo apt update
-sudo apt install gmsh
-📐 Geometry Creation & Meshing
-Open geometry/t_shape.geo in Gmsh.
+## 📐 Geometry Details
 
-Adjust lc (characteristic length); 0.1 works well.
+- **Channel width:** 50 µm per inlet, 100 µm total.  
+- **Curve loops:** Define inlet_1, inlet_2, outlet, wall_vertical, wall_horizental, frontAndBackPlanes.  
+- **Meshing tip:** If loop isn’t closed, Gmsh reports “Curve loop is wrong.” Delete/redefine the loop in the GUI or script.
 
-Use Gmsh GUI to define points, connect lines, and create Curve Loops.
+---
 
-Define Plane Surfaces and Physical Groups (inlet_1, inlet_2, outlet, walls, frontAndBackPlanes).
+## 🚧 Common Errors
 
-Mesh: 1D → 2D → 3D.
+- **Multiple Physical Surfaces:** Assign each patch its own Plane Surface.  
+- **Curve Loop Errors:** Ensure every boundary line appears exactly once in its loop.  
+- **High Non-orthogonality (>70°):** Refine mesh or adjust geometry.  
+- **High Courant Number (>5):** Reduce `deltaT` or refine mesh.
 
-If “Curve loop is wrong” error appears, ensure every line is in exactly one Curve Loop.
+---
 
-Export mesh for OpenFOAM (see Quick Start).
+## 🔮 Next Steps
 
-⚙️ Simulation Control
-Edit files under system/:
+### Two-Phase Dilution Simulation
 
-controlDict
+- Transition to `interFoam` or `twoPhaseEulerFoam` for ethanol–lipid mixing.  
+- Automate parameter sweeps (inlet velocity, FRR, geometry) with shell scripts or GNU Parallel.  
+- Validate pressure drop and mixing length against published iLiNP data.
 
-application icoFoam;
+---
 
-endTime 7e-6; deltaT 1e-8; maxCo 1; writeInterval 20;
+## 📝 License & Contributions
 
-fvSchemes – temporal & spatial schemes
+Contributions and issues welcome.  
+Maintainer: Your Name (<your.email@institution.edu>)  
 
-fvSolution – solver settings, PISO correctors
-
-foamDataToFluentDict – fields for Fluent export
-
-Set boundary conditions in 0/U and 0/p:
-
-text
-U boundaryField
-{
-    inlet_1        fixedValue uniform (-0.1 0 0);
-    inlet_2        fixedValue uniform ( 0.1 0 0);
-    outlet         zeroGradient;
-    wall_vertical  noSlip;
-    wall_horizontal noSlip;
-    frontAndBackPlanes empty;
-}
-🚧 Common Issues
-Multiple Physical Surfaces: Assign each patch to exactly one Physical Surface.
-
-Curve Loop Errors: Verify Curve Loop definitions include all and only closing lines.
-
-High Courant Number: If maxCo exceeds ~1–5, reduce deltaT or refine mesh.
-
-📖 References
-Fine‐Tuning LNP Size: ACS Omega, 2018.
-
-Mass Production of RNA‐Loaded LNPs: ACS Omega, 2018.
