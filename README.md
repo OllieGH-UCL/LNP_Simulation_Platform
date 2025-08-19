@@ -59,7 +59,9 @@ $ icofoam
 - If Co > 5, simulation aborts. To fix: refine mesh, reduce `deltaT`, or adjust inlet velocities.
 
 4. **Post-process in ParaView**  
-- $ paraFoam # visualize p and U fields
+```
+$ paraFoam # visualize p and U fields
+```
 - Load the case; click **Apply**.  
 - Visualize **Pressure (p)** and **Velocity (U)** over time.  
 - For streamlines, glyphs, or flow‐rate integration, see:  
